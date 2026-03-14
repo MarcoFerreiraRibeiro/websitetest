@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sobre — Feito com Propósito</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0e0c0a;
+      --paper: #f5f0e8;
+      --gold: #b8882a;
+      --rust: #8b3a2a;
+      --mist: #d6cfc0;
+      --deep: #1a1510;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--paper);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+      min-height: 100vh;
+    }
+
+    /* GRAIN */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 3rem;
+      z-index: 100;
+      mix-blend-mode: normal;
+    }
+
+    nav::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(26,21,16,0.9) 0%, transparent 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: var(--paper);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(245,240,232,0.5);
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    /* ── CANVAS SECTION ── */
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    canvas#stars {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      animation: appear 1.8s ease both;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(184,136,42,0.3);
+      padding: 0.5em 1.2em;
+      border-radius: 999px;
+    }
+
+    .stamp-dot {
+      width: 5px; height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.6); }
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 9rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title .line-1 { display: block; font-style: italic; color: var(--gold); }
+    .hero-title .line-2 { display: block; color: var(--paper); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(245,240,232,0.55);
+      max-width: 42ch;
+      line-height: 1.7;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--deep);
+      padding: 0.85em 2em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--paper); transform: translateY(-2px); }
+
+    .btn-ghost {
+      color: rgba(245,240,232,0.5);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .btn-ghost::after {
+      content: '→';
+      transition: transform 0.3s;
+    }
+
+    .btn-ghost:hover { color: var(--paper); }
+    .btn-ghost:hover::after { transform: translateX(4px); }
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      padding: 8rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .manifesto-header {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 6rem;
+    }
+
+    .manifesto-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-top: 0.5rem;
+    }
+
+    .manifesto-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .manifesto-title em { font-style: italic; color: var(--gold); }
+
+    /* PRINCIPLES */
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid rgba(245,240,232,0.08);
+    }
+
+    .principle {
+      padding: 2.5rem;
+      border-right: 1px solid rgba(245,240,232,0.08);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .principle:last-child { border-right: none; }
+    .principle.visible { opacity: 1; transform: translateY(0); }
+
+    .principle::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+
+    .principle:hover::before { transform: scaleX(1); }
+
+    .prin-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: rgba(184,136,42,0.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .prin-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--paper);
+    }
+
+    .prin-text {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(245,240,232,0.6);
+      font-weight: 300;
+    }
+
+    /* ── STATEMENT ── */
+    .statement {
+      padding: 8rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .statement::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(184,136,42,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .statement-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .statement-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .statement-eyebrow::before,
+    .statement-eyebrow::after {
+      content: '';
+      width: 3rem;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+
+    .big-statement {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    .big-statement strong {
+      font-style: normal;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+    }
+
+    /* ── COLOPHON ── */
+    .colophon {
+      border-top: 1px solid rgba(245,240,232,0.08);
+      padding: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .col-left {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.3);
+    }
+
+    .col-center {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .col-right {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.3);
+      text-align: right;
+    }
+
+    .col-right a {
+      color: rgba(184,136,42,0.7);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .col-right a:hover { color: var(--gold); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav, .manifesto, .statement, .colophon { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .manifesto-header { grid-template-columns: 1fr; gap: 1rem; }
+      .principles { grid-template-columns: 1fr; }
+      .principle { border-right: none; border-bottom: 1px solid rgba(245,240,232,0.08); }
+      .colophon { grid-template-columns: 1fr; text-align: center; }
+      .col-right { text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Léxico</a>
+    <div class="nav-links">
+      <a href="index.html">Início</a>
+      <a href="index.html#definition">Definição</a>
+      <a href="index.html#synonyms">Sinónimos</a>
+      <a href="about.html" class="active">Sobre</a>
+    </div>
+    <span style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.3)">EN · PT</span>
+  </nav>
+
+  <!-- HERO WITH PARTICLE CANVAS -->
+  <div class="canvas-wrap">
+    <canvas id="stars"></canvas>
+    <div class="hero-content">
+      <div class="stamp">
+        <span class="stamp-dot"></span>
+        Sobre este projecto
+      </div>
+      <h1 class="hero-title">
+        <span class="line-1">Feito com</span>
+        <span class="line-2">Propósito</span>
+      </h1>
+      <p class="hero-sub">
+        Este espaço nasceu da convicção de que as palavras mais simples
+        escondem as verdades mais profundas. Cada linha escrita com intenção.
+      </p>
+      <div class="cta-row">
+        <a href="index.html" class="btn-primary">Ver Definição</a>
+        <a href="#manifesto" class="btn-ghost">Ler o manifesto</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-header">
+      <p class="manifesto-label">Manifesto</p>
+      <h2 class="manifesto-title">
+        Acreditamos que tudo o que merece existir
+        merece existir <em>por uma razão</em>.
+      </h2>
+    </div>
+
+    <div class="principles">
+      <div class="principle" data-reveal>
+        <div class="prin-num">I</div>
+        <h3 class="prin-title">A intenção precede a forma</h3>
+        <p class="prin-text">
+          Antes de qualquer linha de código, traço ou palavra, existe
+          uma pergunta: <em>porquê?</em> Esse porquê é o propósito —
+          a bússola que orienta todas as decisões que se seguem.
+        </p>
+      </div>
+      <div class="principle" data-reveal>
+        <div class="prin-num">II</div>
+        <h3 class="prin-title">A clareza é um acto de respeito</h3>
+        <p class="prin-text">
+          Comunicar com clareza é respeitar o tempo e a inteligência
+          do outro. Cada palavra escolhida carrega responsabilidade.
+          O ruído é o oposto do propósito.
+        </p>
+      </div>
+      <div class="principle" data-reveal>
+        <div class="prin-num">III</div>
+        <h3 class="prin-title">O detalhe é onde vivemos</h3>
+        <p class="prin-text">
+          A diferença entre algo bom e algo extraordinário está nas
+          escolhas invisíveis — o espaço entre letras, a hesitação
+          antes de uma vírgula, o silêncio que dá sentido ao som.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement">
+    <div class="statement-inner">
+      <p class="statement-eyebrow">✦ a nossa convicção ✦</p>
+      <p class="big-statement">
+        Não fazemos coisas para existirem.
+        <strong>Fazemo-las para importarem.</strong>
+        Cada projecto é uma declaração de que o mundo pode ser feito
+        com mais cuidado, mais significado, mais propósito.
+      </p>
+    </div>
+  </section>
+
+  <!-- COLOPHON / FOOTER -->
+  <footer>
+    <div class="colophon">
+      <p class="col-left">© 2026 Léxico — Purpose<br>Todos os direitos reservados</p>
+      <p class="col-center">✦</p>
+      <p class="col-right">
+        <a href="index.html">← Voltar ao início</a><br><br>
+        <a href="https://pages.github.com" target="_blank">GitHub Pages</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ── PARTICLE FIELD ──
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function init() {
+      resize();
+      particles = [];
+      const count = Math.floor((W * H) / 8000);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: randomBetween(0, W),
+          y: randomBetween(0, H),
+          r: randomBetween(0.3, 1.8),
+          alpha: randomBetween(0.1, 0.7),
+          speed: randomBetween(0.05, 0.25),
+          drift: randomBetween(-0.08, 0.08),
+          pulse: randomBetween(0, Math.PI * 2),
+          pulseSpeed: randomBetween(0.005, 0.02),
+          gold: Math.random() < 0.12
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.pulse += p.pulseSpeed;
+        const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.gold
+          ? `rgba(184,136,42,${a})`
+          : `rgba(245,240,232,${a})`;
+        ctx.fill();
+
+        p.y -= p.speed;
+        p.x += p.drift;
+        if (p.y < -2) { p.y = H + 2; p.x = randomBetween(0, W); }
+        if (p.x < -2 || p.x > W + 2) { p.x = randomBetween(0, W); }
+      });
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+
+    // ── SCROLL REVEAL ──
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((obs) => {
+      obs.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 140);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── NAV SCROLL BLUR ──
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.backdropFilter = window.scrollY > 20 ? 'blur(12px)' : '';
+    });
+  </script>
+
+</body>
+</html>
