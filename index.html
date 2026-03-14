@@ -1,6 +1,648 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purpose — O Propósito</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0e0c0a;
+      --paper: #f5f0e8;
+      --gold: #b8882a;
+      --rust: #8b3a2a;
+      --mist: #d6cfc0;
+      --fade: rgba(14,12,10,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* GRAIN OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 2.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      bottom: -0.15em;
+      left: -0.05em;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(12rem, 28vw, 28rem);
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--mist);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: -0.03em;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      from { transform: translateX(-2%) skewX(-0.5deg); }
+      to   { transform: translateX(2%) skewX(0.5deg); }
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      position: relative;
+      z-index: 10;
+      animation: fadeUp 1s ease both;
+    }
+
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: 0.08em; color: var(--ink); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { text-decoration: none; color: inherit; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--rust); }
+
+    .hero-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+      z-index: 10;
+      padding: 4rem 0 6rem;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 12vw, 11rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      max-width: 12ch;
+      animation: fadeUp 1s 0.35s ease both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #5a5040;
+      margin-top: 2.5rem;
+      max-width: 38ch;
+      line-height: 1.6;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+
+    .scroll-cue {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      animation: fadeUp 1s 0.8s ease both;
+    }
+
+    .scroll-line {
+      width: 3rem;
+      height: 1px;
+      background: var(--gold);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--rust);
+      transform: translateX(-100%);
+      animation: slide 2s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes slide {
+      0%   { transform: translateX(-100%); }
+      50%  { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 3rem;
+      margin: 1rem 0;
+    }
+
+    .divider-line { flex: 1; height: 1px; background: var(--mist); }
+    .divider-ornament { font-size: 1.2rem; color: var(--gold); }
+
+    /* ── DEFINITION SECTION ── */
+    .definition {
+      padding: 6rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+      position: relative;
+    }
+
+    .def-sidebar {
+      position: sticky;
+      top: 3rem;
+    }
+
+    .def-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .def-word {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .def-pronunciation {
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #7a6e60;
+      margin-top: 0.5rem;
+    }
+
+    .def-pos {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.3em 0.8em;
+      margin-top: 1.2rem;
+    }
+
+    .def-origin {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--mist);
+    }
+
+    .def-origin-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .def-origin p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #5a5040;
+      font-style: italic;
+    }
+
+    .def-content { }
+
+    .def-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--fade);
+      line-height: 1;
+      margin-bottom: -1rem;
+      letter-spacing: -0.04em;
+    }
+
+    .def-entry {
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .def-entry.visible { opacity: 1; transform: translateY(0); }
+
+    .def-text {
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .def-text strong { font-weight: 400; color: var(--rust); }
+
+    .def-example {
+      margin-top: 1rem;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--gold);
+      font-style: italic;
+      font-size: 1rem;
+      color: #6a6050;
+      line-height: 1.7;
+    }
+
+    /* ── QUOTE BREAK ── */
+    .quote-break {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 6rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-break::before {
+      content: '\201C';
+      position: absolute;
+      top: -0.3em;
+      left: 0.1em;
+      font-family: 'Playfair Display', serif;
+      font-size: 20rem;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-style: italic;
+      font-weight: 400;
+      max-width: 22ch;
+      line-height: 1.35;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote-text em { color: var(--gold); font-style: normal; }
+
+    .quote-author {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8a7e70;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SYNONYMS ── */
+    .synonyms {
+      padding: 6rem 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+    }
+
+    .section-line { flex: 1; height: 1px; background: var(--mist); }
+
+    .synonym-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--mist);
+      border: 1px solid var(--mist);
+    }
+
+    .synonym-item {
+      background: var(--paper);
+      padding: 1.5rem;
+      cursor: default;
+      transition: background 0.25s, color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .synonym-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .synonym-item:hover { background: var(--ink); color: var(--paper); }
+    .synonym-item:hover::after { width: 100%; }
+    .synonym-item:hover .syn-lang { color: var(--gold); }
+
+    .syn-word {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .syn-lang {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 0.3rem;
+      transition: color 0.25s;
+    }
+
+    .syn-def {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #7a6e60;
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    .synonym-item:hover .syn-def { color: var(--mist); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--mist);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #9a8e80;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── UTILS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero, .definition, .synonyms, .quote-break, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .definition { grid-template-columns: 1fr; }
+      .def-sidebar { position: static; }
+      .nav-links { display: none; }
+      .divider { padding: 0 1.5rem; }
+    }
+  </style>
+</head>
 <body>
-  <h1>Olá, Mundo! Este é meu site no GitHub Pages.</h1>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">purpose</div>
+
+    <nav class="nav">
+      <span class="nav-logo">Léxico</span>
+      <div class="nav-links">
+        <a href="#definition">Definição</a>
+        <a href="#synonyms">Sinónimos</a>
+      </div>
+      <span>EN · PT</span>
+    </nav>
+
+    <div class="hero-center">
+      <p class="eyebrow">Substantivo · Filosofia · Vida</p>
+      <h1>The <em>art</em> of knowing why</h1>
+      <p class="hero-sub">
+        Uma palavra que carrega o peso de toda a intenção humana —
+        o fio invisível entre o que somos e o que escolhemos fazer.
+      </p>
+    </div>
+
+    <div class="scroll-cue">
+      <span class="scroll-line"></span>
+      <span>Explorar</span>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-ornament">✦</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- DEFINITION -->
+  <section class="definition" id="definition">
+    <div class="def-sidebar">
+      <p class="def-label">Entrada</p>
+      <h2 class="def-word">Purpose</h2>
+      <p class="def-pronunciation">/ˈpɜː.pəs/</p>
+      <span class="def-pos">substantivo</span>
+
+      <div class="def-origin">
+        <p class="def-origin-label">Etimologia</p>
+        <p>
+          Do Anglo-Francês <em>purpos</em>, do Francês Antigo
+          <em>porpos</em> — "intenção, desígnio". Derivado do
+          latim <em>proponere</em>: <em>pro</em> (antes) +
+          <em>ponere</em> (colocar). Literalmente: <em>aquilo que se
+          coloca à frente de si mesmo.</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="def-content">
+
+      <div class="def-entry" data-reveal>
+        <div class="def-number">01</div>
+        <p class="def-text">
+          A <strong>razão fundamental</strong> pela qual algo existe ou é feito;
+          a causa que move uma ação antes de qualquer resultado ser alcançado.
+          O propósito antecede o plano — é a pergunta "porquê" respondida antes
+          do "como".
+        </p>
+        <blockquote class="def-example">
+          "Não é suficiente saber o que fazer; é preciso saber <em>por que</em> o fazer."
+          — Viktor Frankl
+        </blockquote>
+      </div>
+
+      <div class="def-entry" data-reveal>
+        <div class="def-number">02</div>
+        <p class="def-text">
+          Em psicologia e filosofia existencial: o sentido de <strong>direcção
+          consciente</strong> e <strong>intenção contínua</strong> que orienta
+          as escolhas de um indivíduo ou organização através do tempo —
+          independentemente das circunstâncias externas.
+        </p>
+        <blockquote class="def-example">
+          "Aquele que tem um <em>porquê</em> para viver pode suportar quase
+          qualquer <em>como</em>." — Friedrich Nietzsche
+        </blockquote>
+      </div>
+
+      <div class="def-entry" data-reveal>
+        <div class="def-number">03</div>
+        <p class="def-text">
+          Na linguagem organizacional: a <strong>declaração nuclear</strong>
+          que define a contribuição única e duradoura de uma entidade para o mundo
+          — distinta da missão (o que fazemos) e da visão (onde queremos chegar).
+          O propósito é <em>permanente</em>; os objetivos, transitórios.
+        </p>
+        <blockquote class="def-example">
+          "As empresas com propósito claro superam as restantes porque
+          tomam decisões mais rápidas, mais consistentes e mais humanas."
+        </blockquote>
+      </div>
+
+      <div class="def-entry" data-reveal>
+        <div class="def-number">04</div>
+        <p class="def-text">
+          <strong>Determinação resoluta</strong>; o estado interior de quem age
+          com clareza e comprometimento, sem ambiguidade quanto ao destino escolhido.
+          Sinónimo de <em>intencionalidade plena</em>.
+        </p>
+        <blockquote class="def-example">
+          "Ele entrou na sala com propósito — cada gesto despido de hesitação,
+          cada palavra medida pela mesma bússola interna."
+        </blockquote>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- QUOTE BREAK -->
+  <div class="quote-break">
+    <p class="quote-text">
+      "O propósito não é algo que se <em>encontra</em> —
+      é algo que se <em>constrói</em>, escolha após escolha."
+    </p>
+    <p class="quote-author">— Filosofia Existencialista Moderna</p>
+  </div>
+
+  <!-- SYNONYMS -->
+  <section class="synonyms" id="synonyms">
+    <div class="section-header">
+      <h2 class="section-title">Universo Semântico</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="synonym-grid">
+      <div class="synonym-item">
+        <p class="syn-word">Intenção</p>
+        <p class="syn-lang">PT · Cognato próximo</p>
+        <p class="syn-def">A orientação consciente da vontade para um fim determinado.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Sentido</p>
+        <p class="syn-lang">PT · Filosófico</p>
+        <p class="syn-def">Significado que transcende a utilidade imediata de um ato.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Desígnio</p>
+        <p class="syn-lang">PT · Literário</p>
+        <p class="syn-def">Plano maior, muitas vezes de origem transcendente ou moral.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Ikigai</p>
+        <p class="syn-lang">JP · Cultural</p>
+        <p class="syn-def">Razão de ser; a intersecção do que amas, fazes bem e o mundo precisa.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Telos</p>
+        <p class="syn-lang">GR · Aristotélico</p>
+        <p class="syn-def">O fim último para o qual toda a natureza de uma coisa tende.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Vocação</p>
+        <p class="syn-lang">PT · Espiritual</p>
+        <p class="syn-def">Chamamento interior que alinha identidade e ação no mundo.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Dharma</p>
+        <p class="syn-lang">SA · Védico</p>
+        <p class="syn-def">O dever cósmico e o caminho reto específico de cada ser.</p>
+      </div>
+      <div class="synonym-item">
+        <p class="syn-word">Raison d'être</p>
+        <p class="syn-lang">FR · Existencial</p>
+        <p class="syn-def">A razão de existir; a justificação mais profunda da própria presença.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-ornament">✦</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <footer>
+    <span>© 2026 Léxico — Purpose</span>
+    <span>Uma palavra. Infinitas direcções.</span>
+    <a href="https://pages.github.com" target="_blank">GitHub Pages</a>
+  </footer>
+
+  <script>
+    // Intersection Observer for scroll reveals
+    const entries = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((obs) => {
+      obs.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    entries.forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.12}s`;
+      observer.observe(el);
+    });
+  </script>
+
 </body>
 </html>
